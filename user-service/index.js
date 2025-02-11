@@ -24,7 +24,6 @@ app.get('/', (req,res) => {
 app.use('/api', routes);
 
 
-
 process.on("uncaughtException",(err) => {
     console.log("exception error",err.message)
     console.log("Stack Trace:", err.stack);

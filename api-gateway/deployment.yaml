@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservices-api-gateway-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservices-api-gateway
+  template:
+    metadata:
+      labels:
+        app: microservices-api-gateway
+    spec:
+      containers:
+      - name: microservices-api-gateway
+        image: microservices-api-gateway:latest
+        ports:
+        - containerPort: 3001

@@ -3,7 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const router = require('./routes/routes');
-const PORT = 3003;
+const PORT = process.env.PORT || 3001;
 
 // Route to forward requests to the user service
 app.get('/users', async (req, res) => {

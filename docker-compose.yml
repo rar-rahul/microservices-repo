@@ -1,0 +1,59 @@
+services:
+  user-service:
+    build:
+      context: ./user-service  # Path to the user service directory
+    container_name: user-service
+    ports:
+      - "5000:5000"  # Expose port 3001 to the host
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+    depends_on:
+      - mongo  # Ensure MongoDB is up before the user service starts
+
+  order-service:
+    build:
+      context: ./order-service  # Path to the order service directory
+    container_name: order-service
+    ports:
+      - "3000:3000"  # Expose port 3002 to the host
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+    depends_on:
+      - mongo  # Ensure MongoDB is up before the order service starts
+
+  api-gateway:
+    build:
+      context: ./api-gateway  # Path to the API Gateway directory
+    container_name: api-gateway
+    ports:
+      - "3001:3001"  # Expose port 8080 for the gateway
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+    depends_on:
+      - user-service
+      - order-service
+
+  mongo:
+    image: mongo:latest  # Using MongoDB as a database for the services
+    container_name: mongo
+    volumes:
+      - mongo-data:/data/db  # Persist data in a volume
+    networks:
+      - app-network
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=
+      - MONGO_INITDB_ROOT_PASSWORD=
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
